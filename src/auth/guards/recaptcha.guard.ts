@@ -7,6 +7,10 @@ export class RecaptchaGuard implements CanActivate {
     constructor(private readonly httpService: HttpService) {}
 
     canActivate(context: ExecutionContext): boolean | Promise<boolean> | Observable<boolean> {
+        if (process.env.RECAPTCHA_ENABLED === 'false') {
+            return true
+        }
+
         const { body } = context.switchToHttp().getRequest()
         return this.httpService
             .post<{
